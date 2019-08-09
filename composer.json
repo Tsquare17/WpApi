@@ -1,0 +1,16 @@
+{
+    "name": "tsquare/wpapi",
+    "description": "A Laravel package to interact with WordPress REST APIs.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Trevor Thompson",
+            "email": "trevor@trevomail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.1",
+        "ext-curl": "*"
+    }
+}
