@@ -1,6 +1,8 @@
 {
     "name": "tsquare/wpapi",
+    "version": "0.1.0",
     "description": "A PHP cURL Wrapper for WordPress REST APIs.",
+    "keywords": ["wp", "api", "wordpress", "rest"],
     "license": "MIT",
     "authors": [
         {
