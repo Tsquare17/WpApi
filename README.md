@@ -1,2 +1,2 @@
-# WpApi
-A Laravel package to interact with WordPress REST APIs.
+# Tsquare\WpApi
+A PHP cURL Wrapper for WordPress REST APIs.
