@@ -2,7 +2,7 @@
 
 namespace Tsquare\WpApi;
 
-class Tags {
+class Comments {
 
 	/**
 	 * @param $url string
@@ -11,6 +11,6 @@ class Tags {
 	 */
 	public static function all( $url ): array
 	{
-		return json_decode(Curl::get($url . '/wp-json/wp/v2/tags'), true);
+		return json_decode(Curl::get($url . '/wp-json/wp/v2/comments'), true);
 	}
 }

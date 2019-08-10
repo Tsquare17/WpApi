@@ -2,23 +2,26 @@
 
 namespace Tsquare\WpApi;
 
-use Tsquare\WpApi\Curl;
-
 class Users {
-
 
     /**
      * @param $url string
      *
-     * @return object
+     * @return array
      */
-    public static function all( $url ): object
+    public static function all( $url ): array
     {
-        return Curl::get($url . '/wp-json/wp/v2/users');
+        return json_decode(Curl::get($url . '/wp-json/wp/v2/users'), true);
     }
 
-    public static function byId( $id ): object
+	/**
+	 * @param $url string
+	 * @param $id string|int
+	 *
+	 * @return array
+	 */
+    public static function byId( $url, $id ): array
     {
-        return Curl::get($url . "/wp-json/wp/v2/users/{$id}");
+        return json_decode(Curl::get($url . "/wp-json/wp/v2/users/{$id}"), true);
     }
 }
