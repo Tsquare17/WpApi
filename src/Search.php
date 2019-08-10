@@ -2,6 +2,6 @@
 
 namespace Tsquare\WpApi;
 
-class Nav {
+class Search {
 
 }
