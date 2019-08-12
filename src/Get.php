@@ -3,15 +3,16 @@
 namespace Tsquare\WpApi;
 
 class Get {
+
 	/**
 	 * @param $url string
 	 * @param $endpoint string
 	 *
-	 * @return array
+	 * @return object
 	 */
-	public static function all( $url, $endpoint ): array
+	public static function all( $url, $endpoint )
 	{
-		return json_decode(Curl::get("{$url}/wp-json/wp/v2/{$endpoint}"), true);
+		return json_decode(Curl::get("{$url}/wp-json/wp/v2/{$endpoint}"), false);
 	}
 
 	/**
@@ -19,10 +20,15 @@ class Get {
 	 * @param $endpoint string
 	 * @param $id string|int
 	 *
-	 * @return array
+	 * @return object
 	 */
-	public static function byId( $url, $endpoint, $id ): array
+	public static function byId( $url, $endpoint, $id )
 	{
-		return json_decode(Curl::get("{$url}/wp-json/wp/v2/{$endpoint}/{$id}"), true);
+		return json_decode(Curl::get("{$url}/wp-json/wp/v2/{$endpoint}/{$id}"), false);
+	}
+
+	public static function bySlug( $url, $endpoint, $slug ): array
+	{
+		return json_decode(Curl::get("{$url}/wp-json/wp/v2/{$endpoint}?slug={$slug}"), false);
 	}
 }
