@@ -14,6 +14,8 @@ class Post {
 	public static function bySlug( $slug ): object
 	{
 		$url = env('APP_WP_API');
-		return Get::bySlug($url, 'posts', $slug)[0];
+		$result = Get::bySlug($url, 'posts', $slug)[0];
+
+		return $result['result'];
 	}
 }

@@ -4,7 +4,10 @@ namespace Tsquare\WpApi;
 
 class Categories {
 
-	protected $categories;
+	protected $url;
+	public $totalCategories;
+	public $totalPages;
+	public $categories;
 
 	/**
 	 *
@@ -12,8 +15,7 @@ class Categories {
 	 */
 	public function __construct()
 	{
-		$url = env('APP_WP_API');
-		$this->categories = Get::all($url, 'categories');
+		$this->url = env('APP_WP_API');
 	}
 
 	/**
@@ -22,6 +24,11 @@ class Categories {
 	 */
 	public function all()
 	{
-		return $this->categories;
+		$request = Get::all($this->url, 'categories');
+		$this->totalCategories = (int) $request['total-items'][0];
+		$this->totalPages = (int) $request['total-pages'][0];
+		$this->categories = $request['result'];
+
+		return $this;
 	}
 }

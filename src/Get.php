@@ -8,11 +8,14 @@ class Get {
 	 * @param $url string
 	 * @param $endpoint string
 	 *
-	 * @return object
+	 * @param int $page
+	 * @param int $perPage
+	 *
+	 * @return array
 	 */
-	public static function all( $url, $endpoint )
+	public static function all( $url, $endpoint, $page = 1, $perPage = 100 )
 	{
-		return json_decode(self::curl("{$url}/wp-json/wp/v2/{$endpoint}"), false);
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?_embed&per_page={$perPage}&page={$page}");
 	}
 
 	/**
@@ -20,16 +23,16 @@ class Get {
 	 * @param $endpoint string
 	 * @param $id string|int
 	 *
-	 * @return object
+	 * @return array
 	 */
 	public static function byId( $url, $endpoint, $id )
 	{
-		return json_decode(self::curl("{$url}/wp-json/wp/v2/{$endpoint}/{$id}"), false);
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}/{$id}");
 	}
 
-	public static function bySlug( $url, $endpoint, $slug ): array
+	public static function bySlug( $url, $endpoint, $slug )
 	{
-		return json_decode(self::curl("{$url}/wp-json/wp/v2/{$endpoint}?slug={$slug}"), false);
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?slug={$slug}");
 	}
 
 	/**
@@ -37,18 +40,39 @@ class Get {
 	 *
 	 * @return string
 	 */
-	private static function curl( $url ): string
+	private static function curl( $url ): array
 	{
 		try {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_URL, $url);
+
+			$headers = [];
+			curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+				function($curl, $header) use (&$headers)
+				{
+					$len = strlen($header);
+					$header = explode(':', $header, 2);
+					if (count($header) < 2) {
+						return $len;
+					}
+					$headers[strtolower(trim($header[0]))][] = trim($header[1]);
+
+					return $len;
+				}
+			);
+
 			$result = curl_exec($ch);
 			curl_close($ch);
 		} catch(\Exception $e) {
 			return $e->getMessage();
 		}
 
-		return $result;
+		$return = [];
+		$return['total-items'] = $headers['x-wp-total'];
+		$return['total-pages'] = $headers['x-wp-totalpages'];
+		$return['result'] = $result;
+
+		return $return;
 	}
 }

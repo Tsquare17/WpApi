@@ -4,7 +4,10 @@ namespace Tsquare\WpApi;
 
 class Tags {
 
-	protected $tags;
+	protected $url;
+	public $tags;
+	public $totalTags;
+	public $totalPages;
 
 	/**
 	 *
@@ -12,8 +15,7 @@ class Tags {
 	 */
 	public function __construct()
 	{
-		$url = env('APP_WP_API');
-		$this->tags = Get::all($url, 'tags');
+		$this->url = env('APP_WP_API');
 	}
 
 	/**
@@ -22,6 +24,11 @@ class Tags {
 	 */
 	public function all()
 	{
-		return $this->tags;
+		$request = Get::all($this->url, 'tags');
+		$this->totalTags = (int) $request['total-items'][0];
+		$this->totalPages = (int) $request['total-pages'][0];
+		$this->tags = $request['result'];
+
+		return $this;
 	}
 }
