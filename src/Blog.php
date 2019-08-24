@@ -13,6 +13,8 @@ class Blog {
 	public $totalPosts;
 	public $totalPages;
 	public $posts;
+	public $category;
+	public $tag;
 
 	public function __construct($url = null)
 	{
@@ -29,6 +31,29 @@ class Blog {
 
 		return $this;
 	}
+
+	public function getByCategory( $endpoint, $category ): Blog
+	{
+		$request = Get::byCategory($this->url, $endpoint, $category);
+
+		$this->totalPosts = (int) $request['total-items'][0];
+		$this->totalPages = (int) $request['total-pages'][0];
+		$this->posts = $this->formatPosts( json_decode($request['result']) );
+
+		return $this;
+	}
+
+	public function getByTag( $endpoint, $tag ): Blog
+	{
+		$request = Get::byTag($this->url, $endpoint, $tag);
+
+		$this->totalPosts = (int) $request['total-items'][0];
+		$this->totalPages = (int) $request['total-pages'][0];
+		$this->posts = $this->formatPosts( json_decode($request['result']) );
+
+		return $this;
+	}
+
 
 	private function formatPosts( $posts )
 	{

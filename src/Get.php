@@ -32,7 +32,22 @@ class Get {
 
 	public static function bySlug( $url, $endpoint, $slug )
 	{
-		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?slug={$slug}");
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?_embed&slug={$slug}");
+	}
+
+	public static function categoryById( $url, $endpoint, $id )
+	{
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}/?category={$id}");
+	}
+
+	public static function byCategory( $url, $endpoint, $category, $page = 1, $perPage = 100 )
+	{
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?_embed&category={$category}&per_page={$perPage}&page={$page}");
+	}
+
+	public static function byTag( $url, $endpoint, $tag, $page = 1, $perPage = 100 )
+	{
+		return self::curl("{$url}/wp-json/wp/v2/{$endpoint}?_embed&tags={$tag}&per_page={$perPage}&page={$page}");
 	}
 
 	/**
@@ -69,8 +84,10 @@ class Get {
 		}
 
 		$return = [];
-		$return['total-items'] = $headers['x-wp-total'];
-		$return['total-pages'] = $headers['x-wp-totalpages'];
+		if ( isset($headers['x-wp-total']) && isset($headers['x-wp-totalpages']) ) {
+			$return['total-items'] = $headers['x-wp-total'];
+			$return['total-pages'] = $headers['x-wp-totalpages'];
+		}
 		$return['result'] = $result;
 
 		return $return;
